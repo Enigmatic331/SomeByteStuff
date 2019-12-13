@@ -5,37 +5,65 @@ Module Program
         Dim result As String
         Dim hexString As String
 
-        hexString = "0x39"
+        hexString = "0xFF"
         Console.WriteLine("Test hex: " & hexString)
         result = Execute(hexString)
-        Console.WriteLine("Expecting 11001, output " & result)
+        Console.WriteLine("Expecting [1111111], output " & result)
+        Console.WriteLine("")
+
+        hexString = "0x77"
+        Console.WriteLine("Test hex: " & hexString)
+        result = Execute(hexString)
+        Console.WriteLine("Expecting [110111], output " & result)
         Console.WriteLine("")
 
         hexString = "0x3F"
         Console.WriteLine("Test hex: " & hexString)
         result = Execute(hexString)
-        Console.WriteLine("Expecting 11111, output " & result)
+        Console.WriteLine("Expecting [11111], output " & result)
         Console.WriteLine("")
 
         hexString = "0x3E"
         Console.WriteLine("Test hex: " & hexString)
         result = Execute(hexString)
-        Console.WriteLine("Expecting  11110, output " & result)
+        Console.WriteLine("Expecting  [11110], output " & result)
         Console.WriteLine("")
+
+        hexString = "0xFF773F3E"
+        Console.WriteLine("Test hex: " & hexString)
+        result = Execute(hexString)
+        Console.WriteLine("Expecting  [11111111 1110111 111111 11110], output " & result)
+        Console.WriteLine("")
+
     End Sub
     Public Function Execute(ByVal hexString As String) As String
-        Dim Number As UInt16 = Convert.ToUInt16(hexString, 16)
-        'Console.WriteLine("With most significant bit: " & Convert.ToString(Number, 2))
 
-        'find most significant bit
-        Dim MSB = HowManyTimesToShiftRight(Number) - 1 ' why minus 1 ah
-        'Console.WriteLine("Most significant bit: " & MSB)
+        ' remove 0x
+        If hexString.Substring(0, 2) = "0x" Then
+            hexString = hexString.Substring(2)
+        End If
 
-        Dim BitToClear As SByte = 1 << MSB
-        Dim WithoutMSB = Number And Not BitToClear
+        ' process hex in pairs
+        Dim hexList = Enumerable.Range(0, hexString.Length \ 2).[Select](Function(i) hexString.Substring(i * 2, 2)).ToList()
 
-        Return Convert.ToString(WithoutMSB, 2).TrimStart("0")
-        'console.WriteLine("Without most significant bit: " & Convert.ToString(WithoutMSB, 2))
+        Dim count As Integer = 0
+        Dim binaryWithoutMSB As String
+        For Each hexItem In hexList
+            count = count + 1
+            If count = hexList.Count Then
+                'find most significant bit on the rightmost hex and remove
+                Dim Number As UInt32 = Convert.ToUInt32(hexItem, 16)
+                Dim MSB = HowManyTimesToShiftRight(Number) - 1
+
+                Dim BitToClear As UInt32 = 1 << MSB
+                Dim WithoutMSB = Number And Not BitToClear
+                binaryWithoutMSB = binaryWithoutMSB & " " & Convert.ToString(WithoutMSB, 2).TrimStart("0") ' trim off leading empty bits
+            Else
+                binaryWithoutMSB = binaryWithoutMSB & " " & Convert.ToString(Convert.ToUInt16(hexItem, 16), 2).TrimStart("0")
+            End If
+        Next
+
+        Return binaryWithoutMSB.Trim
     End Function
 
     Public Function HowManyTimesToShiftRight(ByVal Value As UShort) As Integer

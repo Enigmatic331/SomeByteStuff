@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\unrea\\source\\repos\\ConsoleApp3\\ConsoleApp3\\SomeByteStuff.vbproj",
+      "projectUniqueName": "C:\\Users\\unrea\\source\\repos\\SomeByteStuff\\ConsoleApp3\\SomeByteStuff.vbproj",
       "projectName": "SomeByteStuff",
-      "projectPath": "C:\\Users\\unrea\\source\\repos\\ConsoleApp3\\ConsoleApp3\\SomeByteStuff.vbproj",
+      "projectPath": "C:\\Users\\unrea\\source\\repos\\SomeByteStuff\\ConsoleApp3\\SomeByteStuff.vbproj",
       "packagesPath": "C:\\Users\\unrea\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\unrea\\source\\repos\\ConsoleApp3\\ConsoleApp3\\obj\\",
+      "outputPath": "C:\\Users\\unrea\\source\\repos\\SomeByteStuff\\ConsoleApp3\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
