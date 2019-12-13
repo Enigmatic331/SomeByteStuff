@@ -29,6 +29,12 @@ Module Program
         Console.WriteLine("Expecting  [11110], output " & result)
         Console.WriteLine("")
 
+        hexString = "0x400001"
+        Console.WriteLine("Test hex: " & hexString)
+        result = Execute(hexString)
+        Console.WriteLine("Expecting  [1000000], output " & result)
+        Console.WriteLine("")
+
         hexString = "0xFF773F3E"
         Console.WriteLine("Test hex: " & hexString)
         result = Execute(hexString)
@@ -59,9 +65,16 @@ Module Program
                 Dim WithoutMSB = Number And Not BitToClear
                 binaryWithoutMSB = binaryWithoutMSB & " " & Convert.ToString(WithoutMSB, 2).TrimStart("0") ' trim off leading empty bits
             Else
-                binaryWithoutMSB = binaryWithoutMSB & " " & Convert.ToString(Convert.ToUInt16(hexItem, 16), 2).TrimStart("0")
+                binaryWithoutMSB = binaryWithoutMSB & " " & Convert.ToString(Convert.ToUInt16(hexItem, 16), 2)
             End If
         Next
+
+        ' once complete, remove leading (from behind, endian-ness) zero bytes - if the leading array is 00
+        Dim binaryList = binaryWithoutMSB.Trim.Split(" ").ToList
+        If binaryList(binaryList.Count - 1) = "0" Then
+            binaryList.RemoveAt(binaryList.Count - 1)
+        End If
+        binaryWithoutMSB = String.Join(" ", binaryList)
 
         Return binaryWithoutMSB.Trim
     End Function
